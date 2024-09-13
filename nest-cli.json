@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/owl-storage-service/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/owl-storage-service/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/owl-storage-service",
+  "projects": {
+    "owl-storage-service": {
+      "type": "application",
+      "root": "apps/owl-storage-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/owl-storage-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/owl-storage-service/tsconfig.app.json"
+      }
+    },
+    "owl-storage": {
+      "type": "library",
+      "root": "libs/owl-storage",
+      "entryFile": "index",
+      "sourceRoot": "libs/owl-storage/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/owl-storage/tsconfig.lib.json"
+      }
+    }
+  }
+}
