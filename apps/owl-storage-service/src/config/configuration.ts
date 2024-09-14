@@ -10,4 +10,5 @@ export default () => ({
   swaggerEnabled: process.env.SWAGGER_ENABLED,
   basePath: process.env.BASE_PATH || '/',
   bodySizeLimit: process.env.BODY_SIZE_LIMIT || '1mb',
+  storageProvider: process.env.STORAGE_PROVIDER,
 });
