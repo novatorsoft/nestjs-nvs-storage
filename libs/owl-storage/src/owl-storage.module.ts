@@ -21,7 +21,7 @@ export class OwlStorageModule {
         ],
         exports: ['StorageService'],
       },
-      OwlStorageModule.getStorageProviderModuleConfig(config?.type),
+      OwlStorageModule.getStorageProviderModuleConfig(config?.provider),
     );
   }
 
@@ -40,7 +40,7 @@ export class OwlStorageModule {
           },
         ],
       },
-      OwlStorageModule.getStorageProviderModuleConfig(config?.type),
+      OwlStorageModule.getStorageProviderModuleConfig(config?.provider),
     );
   }
 

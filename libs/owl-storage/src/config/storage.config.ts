@@ -1,3 +1,5 @@
+import { StorageProvider } from '../dto/storage-provider.dto';
+
 export class StorageConfig {
-  type: 'S3';
+  provider: StorageProvider;
 }
