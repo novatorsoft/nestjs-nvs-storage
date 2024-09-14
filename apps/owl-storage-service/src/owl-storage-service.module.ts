@@ -1,10 +1,13 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-import { OwlStorageServiceController } from './owl-storage-service.controller';
-import { OwlStorageServiceService } from './owl-storage-service.service';
+import config from './config/configuration';
 
 @Module({
-  imports: [],
-  controllers: [OwlStorageServiceController],
-  providers: [OwlStorageServiceService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
+    }),
+  ],
 })
 export class OwlStorageServiceModule {}
