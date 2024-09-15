@@ -1,0 +1,25 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UploadResponse {
+  fileName: String!
+  size: Float!
+  path: String!
+  extension: String!
+  url: String!
+}
+
+type Query {
+  nvsStorageServiceRoot: String!
+}
+
+type Mutation {
+  uploadWithBase64(input: UploadWithBase64Request!): UploadResponse!
+}
+
+input UploadWithBase64Request {
+  fileName: String
+  path: String
+  file: String!
+}

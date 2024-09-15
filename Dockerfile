@@ -9,6 +9,7 @@ RUN yarn install
 
 COPY libs ./libs
 COPY apps ./apps
+COPY schema.gql ./
 
 RUN yarn build nvs-storage-service
 
