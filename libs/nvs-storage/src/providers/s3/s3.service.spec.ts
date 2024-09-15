@@ -74,6 +74,7 @@ describe('S3Service', () => {
       const uploadArgs = MockFactory(UploadArgsFixture)
         .one()
         .withBase64() as UploadArgs<string>;
+      delete uploadArgs.path;
 
       s3Client.on(PutObjectCommand).resolves({
         $metadata: { httpStatusCode: 200 },
