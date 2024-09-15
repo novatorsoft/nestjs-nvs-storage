@@ -5,6 +5,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { S3Config } from './providers/s3/s3.config';
 import { S3Service } from './providers/s3/s3.service';
 import { StorageAsyncConfig } from './config';
+import { StorageProvider } from './dto/storage-provider.dto';
 
 @Module({})
 export class OwlStorageModule {
@@ -58,9 +59,9 @@ export class OwlStorageModule {
     };
   }
 
-  private static getStorageProviderModuleConfig(type?: string) {
+  private static getStorageProviderModuleConfig(provider?: StorageProvider) {
     let storageModuleConfig = {};
-    if (type === 'S3')
+    if (provider === StorageProvider.S3)
       storageModuleConfig = {
         providers: [
           {
@@ -69,7 +70,7 @@ export class OwlStorageModule {
           },
         ],
       };
-    else throw new Error('Invalid storage type');
+    else throw new Error('Invalid storage provider');
 
     return storageModuleConfig;
   }

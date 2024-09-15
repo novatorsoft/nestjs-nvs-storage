@@ -4,6 +4,7 @@ import { OwlStorageModule } from './owl-storage.module';
 import { OwlStorageService } from './owl-storage.service';
 import { S3Config } from './providers/s3/s3.config';
 import { S3ConfigFixture } from '../test/fixtures';
+import { StorageProvider } from './dto/storage-provider.dto';
 import { Test } from '@nestjs/testing';
 
 describe('OwlStorageModule', () => {
@@ -22,7 +23,7 @@ describe('OwlStorageModule', () => {
     const module = await Test.createTestingModule({
       imports: [
         OwlStorageModule.registerAsync({
-          type: s3Config.type,
+          provider: s3Config.provider,
           useFactory: () => {
             return s3Config;
           },
@@ -50,7 +51,7 @@ describe('OwlStorageModule', () => {
     const module = await Test.createTestingModule({
       imports: [
         OwlStorageModule.forRootAsync({
-          type: s3Config.type,
+          provider: s3Config.provider,
           useFactory: () => {
             return s3Config;
           },
@@ -65,13 +66,13 @@ describe('OwlStorageModule', () => {
 
   it('should throw an error when given an invalid provider', async () => {
     const s3Config = MockFactory(S3ConfigFixture)
-      .mutate({ type: Faker.lorem.word() } as any)
+      .mutate({ provider: Faker.lorem.word() as StorageProvider })
       .one();
 
     expect(async () => {
-      Test.createTestingModule({
+      await Test.createTestingModule({
         imports: [OwlStorageModule.register(s3Config)],
       }).compile();
-    }).rejects.toThrow('Invalid storage type');
+    }).rejects.toThrow('Invalid storage provider');
   });
 });

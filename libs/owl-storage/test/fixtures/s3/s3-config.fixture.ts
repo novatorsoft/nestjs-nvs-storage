@@ -1,9 +1,10 @@
 import { Mock } from 'mockingbird';
 import { S3Config } from '../../../src/providers/s3/s3.config';
+import { StorageProvider } from '@app/owl-storage/dto/storage-provider.dto';
 
 export class S3ConfigFixture extends S3Config {
-  @Mock('S3')
-  type: 'S3';
+  @Mock({ enum: StorageProvider })
+  provider: StorageProvider;
 
   @Mock((faker) => faker.internet.url())
   endpoint: string;
