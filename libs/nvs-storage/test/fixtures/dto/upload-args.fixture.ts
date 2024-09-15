@@ -1,5 +1,5 @@
 import { Mock } from 'mockingbird';
-import { UploadArgs } from '@lib/nvs-storage/dto';
+import { UploadArgs } from '@lib/nvs-storage';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   private readonly base64File: string =

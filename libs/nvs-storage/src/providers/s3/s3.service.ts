@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { NvsStorageService } from '@lib/nvs-storage/nvs-storage.service';
-import { UploadArgs } from '@lib/nvs-storage/dto/upload-args.dto';
-import { UploadResult } from '@lib/nvs-storage/dto';
+import { UploadArgs, UploadResult } from '../../dto';
+import { NvsStorageService } from '../../nvs-storage.service';
 import { S3Config } from './s3.config';
 import {
   DeleteObjectCommand,
