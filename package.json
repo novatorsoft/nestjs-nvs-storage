@@ -2,9 +2,15 @@
   "name": "nestjs-nvs-storage",
   "version": "1.0.0",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "Ismet Kizgin",
+  "private": false,
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "main": "dist/libs/nvs-storage/index.js",
+  "files": [
+    "dist",
+    "packages.json"
+  ],
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
@@ -105,5 +111,22 @@
         "infile": "CHANGELOG.md"
       }
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ismetkizgin/nestjs-nvs-storage"
+  },
+  "keywords": [
+    "nestjs",
+    "plugin",
+    "nestjs-plugin",
+    "nvs-storage",
+    "storage",
+    "s3",
+    "aws-s3"
+  ],
+  "bugs": {
+    "url": "https://github.com/ismetkizgin/nestjs-nvs-storage/issues-module"
+  },
+  "homepage": "https://github.com/ismetkizgin/nestjs-nvs-storage#readme-module"
 }

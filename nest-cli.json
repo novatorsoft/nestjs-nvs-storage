@@ -25,6 +25,7 @@
       "entryFile": "index",
       "sourceRoot": "libs/nvs-storage/src",
       "compilerOptions": {
+        "webpack": false,
         "tsConfigPath": "libs/nvs-storage/tsconfig.lib.json"
       }
     }
