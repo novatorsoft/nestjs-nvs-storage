@@ -85,7 +85,7 @@ describe('S3Service', () => {
       expect(s3Client.calls()).toHaveLength(1);
       expect(s3Client.call(0).args[0].input).toEqual({
         Bucket: s3Config.bucket,
-        Key: `${uploadArgs.path}/${uploadArgs.fileName}`,
+        Key: uploadArgs.fileName,
         Body: Buffer.from(uploadArgs.file, 'base64'),
       });
       expect(result).not.toBeNull();

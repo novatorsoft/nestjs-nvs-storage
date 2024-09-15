@@ -26,7 +26,9 @@ export class UploadService {
   }
 
   private getMime(base64Prefix: string) {
-    const mimeType = base64Prefix.match(/data:(.*?);base64/)?.[1];
+    const mimeType = RegExp(/data:(.*?);base64/)
+      .exec(base64Prefix)
+      .at(1);
     return mimeType?.split('/')[1];
   }
 }
