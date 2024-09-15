@@ -1,0 +1,6 @@
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "ismetkizgin",
+    "projectKey": "nestjs-nvs-storage"
+  }
+}
