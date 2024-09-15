@@ -3,6 +3,8 @@ import * as bodyParser from 'body-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
+import { ApiKeyGuard } from './utils/guards';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { NvsStorageServiceModule } from './nvs-storage-service.module';
 import config from './config/configuration';
@@ -27,7 +29,13 @@ function initSwagger(app: INestApplication) {
 }
 
 function initValidationPipe(app: INestApplication) {
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+  );
+}
+
+function initGlobalGuard(app: INestApplication) {
+  app.useGlobalGuards(new ApiKeyGuard(app.get(ConfigService)));
 }
 
 function setGlobalPrefix(app: INestApplication) {
@@ -47,6 +55,7 @@ async function bootstrap() {
   initSwagger(app);
   setGlobalPrefix(app);
   initValidationPipe(app);
+  initGlobalGuard(app);
   await app.listen(config().port);
 }
 bootstrap();
