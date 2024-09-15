@@ -1,5 +1,5 @@
 import { StorageConfig } from '../../config';
-import { StorageProvider } from '@lib/nvs-storage';
+import { StorageProvider } from '../../dto';
 
 export class S3Config extends StorageConfig {
   readonly provider = StorageProvider.S3;
