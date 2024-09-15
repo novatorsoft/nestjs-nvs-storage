@@ -10,7 +10,6 @@ export class ApiKeyGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const apikey = this.configService.get('apiKey');
     let result = false;
     if (!this.isApiKey()) result = true;
 
