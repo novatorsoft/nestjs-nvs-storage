@@ -2,9 +2,6 @@ name: Docker Hub Release
 on:
   release:
     types: [published]
-  push:
-    branches:
-      - master
 
 jobs:
   test:
@@ -44,5 +41,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ismetkizgin/nvs-storage-service:latest
+          tags: ismetkizgin/nvs-storage-service:latest, ismetkizgin/nvs-storage-service:${{ env.RELEASE_VERSION }}
           platforms: linux/amd64,linux/arm64
