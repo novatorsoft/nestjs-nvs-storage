@@ -1,31 +1,31 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/owl-storage-service/src",
+  "sourceRoot": "apps/nvs-storage-service/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/owl-storage-service/tsconfig.app.json"
+    "tsConfigPath": "apps/nvs-storage-service/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/owl-storage-service",
+  "root": "apps/nvs-storage-service",
   "projects": {
-    "owl-storage-service": {
+    "nvs-storage-service": {
       "type": "application",
-      "root": "apps/owl-storage-service",
+      "root": "apps/nvs-storage-service",
       "entryFile": "main",
-      "sourceRoot": "apps/owl-storage-service/src",
+      "sourceRoot": "apps/nvs-storage-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/owl-storage-service/tsconfig.app.json"
+        "tsConfigPath": "apps/nvs-storage-service/tsconfig.app.json"
       }
     },
-    "owl-storage": {
+    "nvs-storage": {
       "type": "library",
-      "root": "libs/owl-storage",
+      "root": "libs/nvs-storage",
       "entryFile": "index",
-      "sourceRoot": "libs/owl-storage/src",
+      "sourceRoot": "libs/nvs-storage/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/owl-storage/tsconfig.lib.json"
+        "tsConfigPath": "libs/nvs-storage/tsconfig.lib.json"
       }
     }
   }

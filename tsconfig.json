@@ -19,8 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "@lib/owl-storage": ["libs/owl-storage/src"],
-      "@lib/owl-storage/*": ["libs/owl-storage/src/*"]
+      "@lib/nvs-storage": ["libs/nvs-storage/src"],
+      "@lib/nvs-storage/*": ["libs/nvs-storage/src/*"]
     }
   }
 }
