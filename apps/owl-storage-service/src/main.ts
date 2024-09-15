@@ -37,8 +37,6 @@ function setGlobalPrefix(app: INestApplication) {
 async function bootstrap() {
   const app = await NestFactory.create(OwlStorageServiceModule);
 
-  console.log(config());
-
   app.enableCors({
     origin: config().corsAllowedOrigins || true,
     credentials: true,
