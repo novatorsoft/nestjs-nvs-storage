@@ -1,5 +1,5 @@
 export class UploadArgs<FileType> {
   file: FileType;
-  path: string;
+  path?: string;
   fileName: string;
 }

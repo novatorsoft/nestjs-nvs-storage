@@ -26,7 +26,10 @@ export class S3Service extends OwlStorageService {
   }
 
   async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const path = `${uploadArgs.path}/${uploadArgs.fileName}`;
+    const path = uploadArgs.path
+      ? `${uploadArgs.path}/${uploadArgs.fileName}`
+      : uploadArgs.fileName;
+
     const command = new PutObjectCommand({
       Bucket: this.s3Config.bucket,
       Key: path,
