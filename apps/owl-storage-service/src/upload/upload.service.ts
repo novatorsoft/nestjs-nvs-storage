@@ -1,4 +1,4 @@
-import { OwlStorageService, UploadResult } from '@app/owl-storage';
+import { OwlStorageService, UploadResult } from '@lib/owl-storage';
 import { Inject, Injectable } from '@nestjs/common';
 import { UploadWithBase64Request } from './dto';
 import { uid } from 'uid';

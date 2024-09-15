@@ -1,5 +1,5 @@
 import { StorageConfig } from '../../config';
-import { StorageProvider } from '@app/owl-storage/dto/storage-provider.dto';
+import { StorageProvider } from '@lib/owl-storage';
 
 export class S3Config extends StorageConfig {
   readonly provider = StorageProvider.S3;

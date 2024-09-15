@@ -1,5 +1,5 @@
 import { Mock } from 'mockingbird';
-import { UploadArgs } from '@app/owl-storage/dto';
+import { UploadArgs } from '@lib/owl-storage/dto';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   private readonly base64File: string =

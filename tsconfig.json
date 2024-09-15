@@ -19,8 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "resolveJsonModule": true,
     "paths": {
-      "@app/owl-storage": ["libs/owl-storage/src"],
-      "@app/owl-storage/*": ["libs/owl-storage/src/*"]
+      "@lib/owl-storage": ["libs/owl-storage/src"],
+      "@lib/owl-storage/*": ["libs/owl-storage/src/*"]
     }
   }
 }

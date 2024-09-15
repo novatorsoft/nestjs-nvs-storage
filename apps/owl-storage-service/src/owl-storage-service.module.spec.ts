@@ -2,7 +2,7 @@ import { ConfigurationFixture, S3ConfigurationFixture } from '../test/fixtures';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { MockFactory } from 'mockingbird';
-import { OwlStorageModule } from '@app/owl-storage';
+import { OwlStorageModule } from '@lib/owl-storage';
 import { OwlStorageServiceModule } from './owl-storage-service.module';
 
 jest.mock('./config/configuration', () => ({

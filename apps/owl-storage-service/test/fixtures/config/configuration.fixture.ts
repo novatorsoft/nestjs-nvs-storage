@@ -1,5 +1,5 @@
 import { Mock } from 'mockingbird';
-import { StorageProvider } from '@app/owl-storage/dto/storage-provider.dto';
+import { StorageProvider } from '@lib/owl-storage';
 
 export class ConfigurationFixture {
   @Mock((faker) => faker.internet.port())

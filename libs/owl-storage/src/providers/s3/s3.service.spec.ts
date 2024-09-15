@@ -8,7 +8,7 @@ import { S3ConfigFixture, UploadArgsFixture } from '../../../test/fixtures';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { S3Service } from './s3.service';
-import { UploadArgs } from '@app/owl-storage/dto/upload-args.dto';
+import { UploadArgs } from '@lib/owl-storage/dto/upload-args.dto';
 import { mockClient } from 'aws-sdk-client-mock';
 
 describe('S3Service', () => {

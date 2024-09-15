@@ -1,4 +1,4 @@
-import { OwlStorageService, UploadResult } from '@app/owl-storage';
+import { OwlStorageService, UploadResult } from '@lib/owl-storage';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { MockFactory } from 'mockingbird';

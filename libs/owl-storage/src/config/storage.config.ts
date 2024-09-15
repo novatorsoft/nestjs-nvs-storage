@@ -1,4 +1,4 @@
-import { StorageProvider } from '../dto/storage-provider.dto';
+import { StorageProvider } from '../dto';
 
 export class StorageConfig {
   provider: StorageProvider;

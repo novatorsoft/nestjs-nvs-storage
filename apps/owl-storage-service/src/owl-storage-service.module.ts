@@ -1,8 +1,7 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { OwlStorageModule, StorageProvider } from '@lib/owl-storage';
 
 import { Module } from '@nestjs/common';
-import { OwlStorageModule } from '@app/owl-storage';
-import { StorageProvider } from '@app/owl-storage/dto/storage-provider.dto';
 import { UploadModule } from './upload/upload.module';
 import appConfiguration from './config/configuration';
 import s3Configuration from './config/s3.configuration';

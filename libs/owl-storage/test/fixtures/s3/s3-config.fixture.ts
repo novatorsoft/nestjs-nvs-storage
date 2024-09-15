@@ -1,6 +1,6 @@
 import { Mock } from 'mockingbird';
 import { S3Config } from '../../../src/providers/s3/s3.config';
-import { StorageProvider } from '@app/owl-storage/dto/storage-provider.dto';
+import { StorageProvider } from '@lib/owl-storage';
 
 export class S3ConfigFixture extends S3Config {
   @Mock({ enum: StorageProvider })

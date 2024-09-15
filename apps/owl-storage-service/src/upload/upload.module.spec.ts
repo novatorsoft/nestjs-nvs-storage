@@ -1,6 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { MockFactory } from 'mockingbird';
-import { OwlStorageModule } from '@app/owl-storage';
+import { OwlStorageModule } from '@lib/owl-storage';
 import { S3ConfigFixture } from '../../../../libs/owl-storage/test/fixtures';
 import { Test } from '@nestjs/testing';
 import { UploadModule } from './upload.module';

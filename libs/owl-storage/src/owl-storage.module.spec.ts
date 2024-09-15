@@ -4,7 +4,7 @@ import { OwlStorageModule } from './owl-storage.module';
 import { OwlStorageService } from './owl-storage.service';
 import { S3Config } from './providers/s3/s3.config';
 import { S3ConfigFixture } from '../test/fixtures';
-import { StorageProvider } from './dto/storage-provider.dto';
+import { StorageProvider } from './dto';
 import { Test } from '@nestjs/testing';
 
 describe('OwlStorageModule', () => {

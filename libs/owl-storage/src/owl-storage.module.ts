@@ -5,7 +5,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { S3Config } from './providers/s3/s3.config';
 import { S3Service } from './providers/s3/s3.service';
 import { StorageAsyncConfig } from './config';
-import { StorageProvider } from './dto/storage-provider.dto';
+import { StorageProvider } from './dto';
 
 @Module({})
 export class OwlStorageModule {

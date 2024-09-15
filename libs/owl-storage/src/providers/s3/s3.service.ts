@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { OwlStorageService } from '@app/owl-storage/owl-storage.service';
-import { UploadArgs } from '@app/owl-storage/dto/upload-args.dto';
-import { UploadResult } from '@app/owl-storage/dto';
+import { OwlStorageService } from '@lib/owl-storage/owl-storage.service';
+import { UploadArgs } from '@lib/owl-storage/dto/upload-args.dto';
+import { UploadResult } from '@lib/owl-storage/dto';
 import { S3Config } from './s3.config';
 import {
   DeleteObjectCommand,
