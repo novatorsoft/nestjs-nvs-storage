@@ -2,8 +2,13 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
   "testEnvironment": "node",
+
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "moduleNameMapper": {
+    "^@lib/nvs-storage(.*)$": "<rootDir>/../../../libs/nvs-storage/src$1"
+  },
+  "setupFiles": ["./jest.setup.js"]
 }

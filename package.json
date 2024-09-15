@@ -8,8 +8,8 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start": "nest start nvs-storage-service",
+    "start:dev": "nest start --watch nvs-storage-service",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/nvs-storage-service/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

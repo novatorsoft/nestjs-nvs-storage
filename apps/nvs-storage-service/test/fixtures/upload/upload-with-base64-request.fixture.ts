@@ -10,6 +10,6 @@ export class UploadWithBase64RequestFixture extends UploadWithBase64Request {
   @Mock((faker) => faker.lorem.word())
   fileName: string;
 
-  @Mock((faker) => faker.system.directoryPath())
+  @Mock((faker) => faker.lorem.word())
   path: string;
 }
