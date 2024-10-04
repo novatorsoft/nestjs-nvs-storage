@@ -45,15 +45,6 @@ export class S3Service extends NvsStorageService {
     };
   }
 
-  async uploadWithBase64Async(
-    uploadArgs: UploadArgs<string>,
-  ): Promise<UploadResult> {
-    return await this.uploadAsync({
-      ...uploadArgs,
-      file: Buffer.from(uploadArgs.file, 'base64'),
-    });
-  }
-
   async deleteAsync(path: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Bucket: this.s3Config.bucket,
