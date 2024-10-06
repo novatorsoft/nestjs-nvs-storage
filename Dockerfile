@@ -9,6 +9,10 @@ COPY apps ./apps
 COPY schema.gql ./
 
 RUN yarn install \
-    && yarn build nvs-storage-service
+    && yarn build nvs-storage-service \
+    && addgroup --system nonroot \
+    && adduser --system nonroot --ingroup nonroot
+
+USER nonroot
 
 CMD [ "node", "dist/apps/nvs-storage-service/src/main.js" ]
