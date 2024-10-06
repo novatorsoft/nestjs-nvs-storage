@@ -12,18 +12,26 @@ import {
   UploadWithUrlRequestFixture,
 } from './fixtures';
 
+import { HttpService } from '@nestjs/axios';
 import { MockFactory } from 'mockingbird';
 import { NvsStorageServiceModule } from '../src/nvs-storage-service.module';
 import { mockClient } from 'aws-sdk-client-mock';
+import { of } from 'rxjs';
 
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
   const s3Client = mockClient(S3Client);
+  const mockHttpService = {
+    get: jest.fn(),
+  };
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [NvsStorageServiceModule],
-    }).compile();
+    })
+      .overrideProvider(HttpService)
+      .useValue(mockHttpService)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
@@ -73,6 +81,19 @@ describe('UploadController (e2e)', () => {
     s3Client.on(PutObjectCommand).resolves({
       $metadata: { httpStatusCode: 200 },
     });
+
+    const mockBuffer = Buffer.from('test file content');
+    mockHttpService.get.mockReturnValue(
+      of({
+        data: mockBuffer,
+        headers: {
+          'content-type': 'image/jpeg',
+          'content-length': mockBuffer.length.toString(),
+        },
+        status: 200,
+        statusText: 'OK',
+      }),
+    );
 
     return request(app.getHttpServer())
       .post('/upload/with-url')
