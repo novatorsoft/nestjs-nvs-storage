@@ -37,7 +37,7 @@ export abstract class NvsStorageService {
   }
 
   protected async getFileExtensionByBufferAsync(file: Buffer): Promise<string> {
-    const { ext } = await fromBuffer(file);
-    return ext;
+    const fileType = await fromBuffer(file);
+    return fileType?.ext ?? 'bin';
   }
 }
