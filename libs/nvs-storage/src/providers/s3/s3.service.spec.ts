@@ -144,6 +144,32 @@ describe('S3Service', () => {
         'Failed to retrieve file from URL.',
       );
     });
+
+    it('should successfully load a url file and get it as bin if there is no ext.', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture).one().withUrl();
+      const file = Buffer.from(Faker.lorem.words(2));
+      delete uploadArgs.path;
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of({ data: file } as AxiosResponse));
+
+      const result = await service.uploadWithUrlAsync(
+        uploadArgs as UploadArgs<string>,
+      );
+
+      expect(s3Client.calls()).toHaveLength(1);
+      expect(s3Client.call(0).args[0].input).toEqual({
+        Bucket: s3Config.bucket,
+        Key: uploadArgs.fileName + '.bin',
+        Body: file,
+      });
+      expect(result).not.toBeNull();
+    });
   });
 
   describe('deleteAsync', () => {
