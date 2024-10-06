@@ -1,6 +1,6 @@
 import { NvsStorageService, UploadResult } from '@lib/nvs-storage';
 import { Inject, Injectable } from '@nestjs/common';
-import { UploadWithBase64Request } from './dto';
+import { UploadWithBase64Request, UploadWithUrlRequest } from './dto';
 import { uid } from 'uid';
 
 @Injectable()
@@ -13,22 +13,29 @@ export class UploadService {
   uploadWithBase64Async(
     uploadRequest: UploadWithBase64Request,
   ): Promise<UploadResult> {
-    const [base64Prefix, base64Data] = uploadRequest.file.split(',');
+    const base64Data = uploadRequest.file.split(',').at(1);
     const fileName = uploadRequest.fileName
       ? uploadRequest.fileName
       : `${uid(6)}-${new Date().getTime()}`;
 
     return this.storageService.uploadWithBase64Async({
-      fileName: `${fileName}.${this.getMime(base64Prefix)}`,
+      fileName: this.createFileName(fileName),
       path: uploadRequest.path,
       file: base64Data,
     });
   }
 
-  private getMime(base64Prefix: string) {
-    const mimeType = RegExp(/data:(.*?);base64/)
-      .exec(base64Prefix)
-      .at(1);
-    return mimeType?.split('/')[1];
+  uploadWithUrlAsync(
+    uploadRequest: UploadWithUrlRequest,
+  ): Promise<UploadResult> {
+    return this.storageService.uploadWithUrlAsync({
+      file: uploadRequest.fileUrl,
+      fileName: this.createFileName(uploadRequest.fileName),
+      path: uploadRequest.path,
+    });
+  }
+
+  private createFileName(fileName: string) {
+    return fileName ? fileName : `${uid(6)}-${new Date().getTime()}`;
   }
 }

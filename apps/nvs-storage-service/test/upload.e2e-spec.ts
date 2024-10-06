@@ -3,11 +3,17 @@ import * as request from 'supertest';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { Test, TestingModule } from '@nestjs/testing';
+import {
+  UploadWithBase64Request,
+  UploadWithUrlRequest,
+} from '../src/upload/dto';
+import {
+  UploadWithBase64RequestFixture,
+  UploadWithUrlRequestFixture,
+} from './fixtures';
 
 import { MockFactory } from 'mockingbird';
 import { NvsStorageServiceModule } from '../src/nvs-storage-service.module';
-import { UploadWithBase64Request } from '../src/upload/dto';
-import { UploadWithBase64RequestFixture } from './fixtures';
 import { mockClient } from 'aws-sdk-client-mock';
 
 describe('UploadController (e2e)', () => {
@@ -53,6 +59,37 @@ describe('UploadController (e2e)', () => {
   it('should give error if body is empty when loading file with base64', () => {
     return request(app.getHttpServer())
       .post('/upload/with-base64')
+      .expect(HttpStatus.BAD_REQUEST)
+      .expect((response) => {
+        expect(response.body.message).toBeDefined();
+      });
+  });
+
+  it('should upload a file with url', () => {
+    const uploadRequest: UploadWithUrlRequest = MockFactory(
+      UploadWithUrlRequestFixture,
+    ).one();
+
+    s3Client.on(PutObjectCommand).resolves({
+      $metadata: { httpStatusCode: 200 },
+    });
+
+    return request(app.getHttpServer())
+      .post('/upload/with-url')
+      .send(uploadRequest)
+      .expect(HttpStatus.CREATED)
+      .expect((response) => {
+        expect(response.body.fileName).toBeDefined();
+        expect(response.body.size).toBeDefined();
+        expect(response.body.path).toBeDefined();
+        expect(response.body.extension).toBeDefined();
+        expect(response.body.url).toBeDefined();
+      });
+  });
+
+  it('should give error if body is empty when loading file with url', () => {
+    return request(app.getHttpServer())
+      .post('/upload/with-url')
       .expect(HttpStatus.BAD_REQUEST)
       .expect((response) => {
         expect(response.body.message).toBeDefined();

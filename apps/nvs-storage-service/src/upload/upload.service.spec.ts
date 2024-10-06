@@ -1,27 +1,29 @@
 import { NvsStorageService, UploadResult } from '@lib/nvs-storage';
 import { Test, TestingModule } from '@nestjs/testing';
+import { UploadWithBase64Request, UploadWithUrlRequest } from './dto';
+import {
+  UploadWithBase64RequestFixture,
+  UploadWithUrlRequestFixture,
+} from '../../test/fixtures/upload';
 
 import { MockFactory } from 'mockingbird';
 import { UploadResultFixture } from '../../../../libs/nvs-storage/test/fixtures';
 import { UploadService } from './upload.service';
-import { UploadWithBase64Request } from './dto';
-import { UploadWithBase64RequestFixture } from '../../test/fixtures/upload';
 
 describe('UploadService', () => {
   let service: UploadService;
   let storageService: jest.Mocked<NvsStorageService>;
 
   beforeEach(async () => {
-    const mockNvsStorageService = {
-      uploadWithBase64Async: jest.fn(),
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UploadService,
         {
           provide: 'StorageService',
-          useValue: mockNvsStorageService,
+          useValue: {
+            uploadWithBase64Async: jest.fn(),
+            uploadWithUrlAsync: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -65,21 +67,37 @@ describe('UploadService', () => {
       expect(storageService.uploadWithBase64Async).toHaveBeenCalled();
       expect(result).toEqual(uploadResult);
     });
+  });
 
-    it('should handle different mime types', async () => {
-      const uploadRequest: UploadWithBase64Request = MockFactory(
-        UploadWithBase64RequestFixture,
+  describe('uploadWithUrlAsync', () => {
+    it('should upload file with provided file name', async () => {
+      const uploadRequest: UploadWithUrlRequest = MockFactory(
+        UploadWithUrlRequestFixture,
+      ).one();
+      const uploadResult: UploadResult = MockFactory(UploadResultFixture).one();
+
+      storageService.uploadWithUrlAsync.mockResolvedValue(uploadResult);
+
+      const result = await service.uploadWithUrlAsync(uploadRequest);
+
+      expect(storageService.uploadWithUrlAsync).toHaveBeenCalled();
+      expect(result).toEqual(uploadResult);
+    });
+
+    it('should generate file name if not provided', async () => {
+      const uploadRequest: UploadWithUrlRequest = MockFactory(
+        UploadWithUrlRequestFixture,
       ).one();
       delete uploadRequest.fileName;
       const uploadResult: UploadResult = MockFactory(UploadResultFixture).one();
 
-      storageService.uploadWithBase64Async.mockResolvedValue(uploadResult);
+      storageService.uploadWithUrlAsync.mockResolvedValue(uploadResult);
 
       jest.spyOn(global.Date, 'now').mockImplementation(() => 1234567890);
 
-      const result = await service.uploadWithBase64Async(uploadRequest);
+      const result = await service.uploadWithUrlAsync(uploadRequest);
 
-      expect(storageService.uploadWithBase64Async).toHaveBeenCalled();
+      expect(storageService.uploadWithUrlAsync).toHaveBeenCalled();
       expect(result).toEqual(uploadResult);
     });
   });

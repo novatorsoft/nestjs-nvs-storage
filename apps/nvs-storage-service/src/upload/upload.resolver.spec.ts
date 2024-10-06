@@ -1,8 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UploadResponse, UploadWithBase64Request } from './dto';
+import {
+  UploadResponse,
+  UploadWithBase64Request,
+  UploadWithUrlRequest,
+} from './dto';
 import {
   UploadResponseFixture,
   UploadWithBase64RequestFixture,
+  UploadWithUrlRequestFixture,
 } from '../../test/fixtures/upload';
 
 import { MockFactory } from 'mockingbird';
@@ -14,16 +19,15 @@ describe('UploadResolver', () => {
   let uploadService: jest.Mocked<UploadService>;
 
   beforeEach(async () => {
-    const mockService = {
-      uploadWithBase64Async: jest.fn(),
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UploadResolver,
         {
           provide: UploadService,
-          useValue: mockService,
+          useValue: {
+            uploadWithBase64Async: jest.fn(),
+            uploadWithUrlAsync: jest.fn(),
+          },
         },
       ],
     }).compile();
@@ -50,6 +54,26 @@ describe('UploadResolver', () => {
       const result = await resolver.uploadWithBase64(uploadRequest);
 
       expect(uploadService.uploadWithBase64Async).toHaveBeenCalledWith(
+        uploadRequest,
+      );
+      expect(result).toEqual(uploadResponse);
+    });
+  });
+
+  describe('uploadWithUrl', () => {
+    it('should call uploadService.uploadWithUrlAsync with correct parameters', async () => {
+      const uploadRequest: UploadWithUrlRequest = MockFactory(
+        UploadWithUrlRequestFixture,
+      ).one();
+      const uploadResponse: UploadResponse = MockFactory(
+        UploadResponseFixture,
+      ).one();
+
+      uploadService.uploadWithUrlAsync.mockResolvedValue(uploadResponse);
+
+      const result = await resolver.uploadWithUrl(uploadRequest);
+
+      expect(uploadService.uploadWithUrlAsync).toHaveBeenCalledWith(
         uploadRequest,
       );
       expect(result).toEqual(uploadResponse);
