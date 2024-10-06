@@ -2,6 +2,7 @@ import * as lodash from 'lodash';
 
 import { DynamicModule, Module } from '@nestjs/common';
 
+import { HttpModule } from '@nestjs/axios';
 import { S3Config } from './providers/s3/s3.config';
 import { S3Service } from './providers/s3/s3.service';
 import { StorageAsyncConfig } from './config';
@@ -72,7 +73,15 @@ export class NvsStorageModule {
       };
     else throw new Error('Invalid storage provider');
 
-    return storageModuleConfig;
+    return {
+      ...storageModuleConfig,
+      imports: [
+        HttpModule.register({
+          timeout: 5000,
+          maxRedirects: 5,
+        }),
+      ],
+    };
   }
 
   private static mergeObject(object1: object, object2: object) {

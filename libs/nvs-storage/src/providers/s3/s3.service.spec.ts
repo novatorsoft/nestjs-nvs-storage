@@ -7,12 +7,16 @@ import { Faker, MockFactory } from 'mockingbird';
 import { S3ConfigFixture, UploadArgsFixture } from '../../../test/fixtures';
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { AxiosResponse } from 'axios';
+import { HttpService } from '@nestjs/axios';
 import { S3Service } from './s3.service';
 import { UploadArgs } from '@lib/nvs-storage';
 import { mockClient } from 'aws-sdk-client-mock';
+import { of } from 'rxjs';
 
 describe('S3Service', () => {
   let service: S3Service;
+  let httpService: HttpService;
   const s3Client = mockClient(S3Client);
   const s3Config = MockFactory(S3ConfigFixture).one();
 
@@ -24,10 +28,17 @@ describe('S3Service', () => {
           provide: 'StorageConfig',
           useValue: s3Config,
         },
+        {
+          provide: HttpService,
+          useValue: {
+            get: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<S3Service>(S3Service);
+    httpService = module.get<HttpService>(HttpService);
     s3Client.reset();
   });
 
@@ -50,7 +61,7 @@ describe('S3Service', () => {
       expect(s3Client.calls()).toHaveLength(1);
       expect(s3Client.call(0).args[0].input).toEqual({
         Bucket: s3Config.bucket,
-        Key: `${uploadArgs.path}/${uploadArgs.fileName}`,
+        Key: `${uploadArgs.path}/${uploadArgs.fileName}.png`,
         Body: uploadArgs.file,
       });
       expect(result).not.toBeNull();
@@ -85,10 +96,53 @@ describe('S3Service', () => {
       expect(s3Client.calls()).toHaveLength(1);
       expect(s3Client.call(0).args[0].input).toEqual({
         Bucket: s3Config.bucket,
-        Key: uploadArgs.fileName,
+        Key: uploadArgs.fileName + '.png',
         Body: Buffer.from(uploadArgs.file, 'base64'),
       });
       expect(result).not.toBeNull();
+    });
+  });
+
+  describe('uploadWithUrlAsync', () => {
+    it('should upload a url file successfully', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture).one().withUrl();
+      delete uploadArgs.path;
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(
+          of({ data: uploadArgs.getBufferFile() } as AxiosResponse),
+        );
+
+      const result = await service.uploadWithUrlAsync(
+        uploadArgs as UploadArgs<string>,
+      );
+
+      expect(s3Client.calls()).toHaveLength(1);
+      expect(s3Client.call(0).args[0].input).toEqual({
+        Bucket: s3Config.bucket,
+        Key: uploadArgs.fileName + '.png',
+        Body: uploadArgs.getBufferFile(),
+      });
+      expect(result).not.toBeNull();
+    });
+
+    it('should throw an error when response data is empty', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withUrl() as UploadArgs<string>;
+
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValue(of({ data: Buffer.from('') } as AxiosResponse));
+
+      await expect(service.uploadWithUrlAsync(uploadArgs)).rejects.toThrow(
+        'Failed to retrieve file from URL.',
+      );
     });
   });
 

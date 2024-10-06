@@ -7,13 +7,17 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class S3Service extends NvsStorageService {
   private readonly s3Client: S3Client;
 
-  constructor(@Inject('StorageConfig') private readonly s3Config: S3Config) {
-    super();
+  constructor(
+    @Inject('StorageConfig') private readonly s3Config: S3Config,
+    httpService: HttpService,
+  ) {
+    super(httpService);
     this.s3Client = new S3Client({
       forcePathStyle: true,
       region: s3Config.region,
@@ -25,9 +29,9 @@ export class S3Service extends NvsStorageService {
   }
 
   async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const path = uploadArgs.path
-      ? `${uploadArgs.path}/${uploadArgs.fileName}`
-      : uploadArgs.fileName;
+    const extension = await this.getFileExtensionByBufferAsync(uploadArgs.file);
+    const fileName = `${uploadArgs.fileName}.${extension}`;
+    const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
 
     const command = new PutObjectCommand({
       Bucket: this.s3Config.bucket,
@@ -40,7 +44,7 @@ export class S3Service extends NvsStorageService {
       path,
       fileName: uploadArgs.fileName,
       size: uploadArgs.file.length,
-      extension: uploadArgs.fileName.split('.').pop(),
+      extension,
       url: `${this.s3Config.endpoint}/${path}`,
     };
   }

@@ -1,4 +1,5 @@
-import { Mock } from 'mockingbird';
+import { Faker, Mock } from 'mockingbird';
+
 import { UploadArgs } from '@lib/nvs-storage';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
@@ -10,7 +11,7 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   @Mock((faker) => faker.system.directoryPath())
   path: string;
 
-  @Mock((faker) => faker.system.commonFileName('png'))
+  @Mock((faker) => faker.lorem.word())
   fileName: string;
 
   withBuffer() {
@@ -21,5 +22,14 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   withBase64() {
     this.file = this.base64File;
     return this;
+  }
+
+  withUrl() {
+    this.file = Faker.image.imageUrl();
+    return this;
+  }
+
+  getBufferFile() {
+    return Buffer.from(this.base64File, 'base64');
   }
 }
