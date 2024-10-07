@@ -9,6 +9,10 @@ export abstract class NvsStorageService {
 
   abstract uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult>;
   abstract deleteAsync(path: string): Promise<void>;
+  abstract createShareLinkAsync(
+    path: string,
+    expiresIn?: number,
+  ): Promise<string>;
 
   async uploadWithBase64Async(
     uploadArgs: UploadArgs<string>,

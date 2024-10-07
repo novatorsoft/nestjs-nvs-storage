@@ -1,5 +1,6 @@
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
@@ -11,8 +12,11 @@ import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { S3Service } from './s3.service';
 import { UploadArgs } from '@lib/nvs-storage';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { mockClient } from 'aws-sdk-client-mock';
 import { of } from 'rxjs';
+
+jest.mock('@aws-sdk/s3-request-presigner');
 
 describe('S3Service', () => {
   let service: S3Service;
@@ -195,6 +199,57 @@ describe('S3Service', () => {
       s3Client.on(DeleteObjectCommand).rejects(new Error('Delete failed'));
 
       await expect(service.deleteAsync(path)).rejects.toThrow('Delete failed');
+    });
+  });
+
+  describe('createShareLinkAsync', () => {
+    it('should successfully create a share link', async () => {
+      const filePath = Faker.system.filePath();
+      const expectedUrl = Faker.internet.url();
+      const expiresIn = 3600;
+
+      (getSignedUrl as jest.Mock).mockResolvedValue(expectedUrl);
+
+      const result = await service.createShareLinkAsync(filePath, expiresIn);
+
+      expect(result).toBe(expectedUrl);
+      expect(getSignedUrl).toHaveBeenCalledWith(
+        expect.any(S3Client),
+        expect.any(GetObjectCommand),
+        { expiresIn },
+      );
+
+      const commandArg = (getSignedUrl as jest.Mock).mock.calls[0][1];
+      expect(commandArg.input).toEqual({
+        Bucket: s3Config.bucket,
+        Key: filePath,
+      });
+    });
+
+    it('should use default expiresIn value when not provided', async () => {
+      const filePath = Faker.system.filePath();
+      const expectedUrl = Faker.internet.url();
+
+      (getSignedUrl as jest.Mock).mockResolvedValue(expectedUrl);
+
+      await service.createShareLinkAsync(filePath);
+
+      expect(getSignedUrl).toHaveBeenCalledWith(
+        expect.any(S3Client),
+        expect.any(GetObjectCommand),
+        { expiresIn: 360 },
+      );
+    });
+
+    it('should throw error when getSignedUrl fails', async () => {
+      const filePath = Faker.system.filePath();
+      const errorMessage = 'Failed to generate signed URL';
+
+      (getSignedUrl as jest.Mock).mockRejectedValue(new Error(errorMessage));
+
+      await expect(service.createShareLinkAsync(filePath)).rejects.toThrow(
+        `Failed to create share link: ${errorMessage}`,
+      );
     });
   });
 });

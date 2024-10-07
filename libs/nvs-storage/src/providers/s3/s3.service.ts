@@ -4,10 +4,12 @@ import { NvsStorageService } from '../../nvs-storage.service';
 import { S3Config } from './s3.config';
 import {
   DeleteObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { HttpService } from '@nestjs/axios';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 @Injectable()
 export class S3Service extends NvsStorageService {
@@ -56,5 +58,23 @@ export class S3Service extends NvsStorageService {
     });
 
     await this.s3Client.send(command);
+  }
+
+  async createShareLinkAsync(
+    path: string,
+    expiresIn: number = 360,
+  ): Promise<string> {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: this.s3Config.bucket,
+        Key: path,
+      });
+
+      return await getSignedUrl(this.s3Client, command, {
+        expiresIn,
+      });
+    } catch (error) {
+      throw new Error(`Failed to create share link: ${error.message}`);
+    }
   }
 }
