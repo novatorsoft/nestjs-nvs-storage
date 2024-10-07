@@ -8,7 +8,7 @@ import { UploadRequest } from './upload-request.dto';
 export class UploadWithBase64Request extends UploadRequest {
   @ApiProperty()
   @IsNotEmpty({ message: 'file is required' })
-  @Matches(/^data:([A-Za-z-+\/]+);base64,([A-Za-z0-9+\/=]*)$/, {
+  @Matches(/^data:([A-Za-z-+/]+);base64,([A-Za-z0-9+/=]*)$/, {
     message: 'file must be a valid base64 encoded string',
   })
   @Field()
