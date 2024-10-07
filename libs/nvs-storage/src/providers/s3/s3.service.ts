@@ -44,7 +44,7 @@ export class S3Service extends NvsStorageService {
     await this.s3Client.send(command);
     return {
       path,
-      fileName: uploadArgs.fileName,
+      fileName,
       size: uploadArgs.file.length,
       extension,
       url: `${this.s3Config.endpoint}/${path}`,
