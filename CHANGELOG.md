@@ -1,5 +1,12 @@
 
 
+## [1.1.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v1.1.0...v1.1.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* fix for upload result ([b99bd03](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/b99bd03c5871ac71b0c608f0df3ebc7799c03c86))
+
 ## [1.1.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v1.0.2...v1.1.0) (2024-10-07)
 
 
