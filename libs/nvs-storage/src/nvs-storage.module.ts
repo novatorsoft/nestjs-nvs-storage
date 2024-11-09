@@ -1,16 +1,18 @@
 import * as lodash from 'lodash';
 
+import { ConfigType, StorageAsyncConfig } from './config';
 import { DynamicModule, Module } from '@nestjs/common';
 
 import { HttpModule } from '@nestjs/axios';
-import { S3Config } from './providers/s3/s3.config';
+import { MinioService } from './providers/minio/minio.service';
 import { S3Service } from './providers/s3/s3.service';
-import { StorageAsyncConfig } from './config';
 import { StorageProvider } from './dto';
 
-@Module({})
+@Module({
+  providers: [],
+})
 export class NvsStorageModule {
-  static register(config: S3Config): DynamicModule {
+  static register(config: ConfigType): DynamicModule {
     return NvsStorageModule.mergeObject(
       {
         module: NvsStorageModule,
@@ -46,7 +48,7 @@ export class NvsStorageModule {
     );
   }
 
-  static forRoot(config: S3Config): DynamicModule {
+  static forRoot(config: ConfigType): DynamicModule {
     return {
       ...this.register(config),
       global: true,
@@ -68,6 +70,15 @@ export class NvsStorageModule {
           {
             provide: 'StorageService',
             useClass: S3Service,
+          },
+        ],
+      };
+    else if (provider === StorageProvider.MINIO)
+      storageModuleConfig = {
+        providers: [
+          {
+            provide: 'StorageService',
+            useClass: MinioService,
           },
         ],
       };

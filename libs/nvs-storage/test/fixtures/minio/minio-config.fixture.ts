@@ -1,7 +1,7 @@
+import { MinioConfig } from '../../../src/providers/minio/minio.config';
 import { Mock } from 'mockingbird';
-import { S3Config } from '../../../src/providers/s3/s3.config';
 
-export class S3ConfigFixture extends S3Config {
+export class MinioConfigFixture extends MinioConfig {
   @Mock((faker) => faker.internet.url())
   endpoint: string;
 
