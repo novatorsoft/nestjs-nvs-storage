@@ -9,13 +9,14 @@ import { Module } from '@nestjs/common';
 import { UploadModule } from './upload/upload.module';
 import appConfiguration from './config/configuration';
 import { join } from 'path';
+import minioConfiguration from './config/minio.configuration';
 import s3Configuration from './config/s3.configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfiguration, s3Configuration],
+      load: [appConfiguration, s3Configuration, minioConfiguration],
     }),
     NvsStorageModule.forRootAsync({
       provider: appConfiguration().storageProvider as StorageProvider,
@@ -23,6 +24,8 @@ import s3Configuration from './config/s3.configuration';
         let storageConfig;
         if (appConfiguration().storageProvider == StorageProvider.S3)
           storageConfig = configService.get('s3');
+        else if (appConfiguration().storageProvider == StorageProvider.MINIO)
+          storageConfig = configService.get('minio');
 
         return storageConfig;
       },
