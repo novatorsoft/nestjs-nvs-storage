@@ -1,13 +1,16 @@
-import { UploadArgs, UploadResult } from './dto';
+import { FileMime, UploadArgs, UploadResult } from './dto';
 
 import { HttpService } from '@nestjs/axios';
+import { ProviderUploadResult } from './dto/provider-upload-result.dto';
 import { firstValueFrom } from 'rxjs';
 import { fromBuffer } from 'file-type';
 
 export abstract class NvsStorageService {
   constructor(private readonly httpService: HttpService) {}
 
-  abstract uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult>;
+  protected abstract uploadProviderAsync(
+    uploadArgs: UploadArgs<Buffer> & FileMime,
+  ): Promise<ProviderUploadResult>;
   abstract deleteAsync(path: string): Promise<void>;
   abstract createShareLinkAsync(
     path: string,
@@ -40,8 +43,33 @@ export abstract class NvsStorageService {
     });
   }
 
-  protected async getFileExtensionByBufferAsync(file: Buffer): Promise<string> {
+  async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
+    const fileInfo = await this.getFileMimeByBufferAsync(uploadArgs.file);
+    const fileName = `${uploadArgs.fileName}.${fileInfo.extension}`;
+    const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
+
+    const uploadResult = await this.uploadProviderAsync({
+      ...uploadArgs,
+      ...fileInfo,
+      fileName,
+      path,
+    });
+
+    return {
+      path,
+      fileName,
+      size: uploadArgs.file.length,
+      extension: fileInfo.extension,
+      mime: fileInfo.mime,
+      ...uploadResult,
+    };
+  }
+
+  protected async getFileMimeByBufferAsync(file: Buffer): Promise<FileMime> {
     const fileType = await fromBuffer(file);
-    return fileType?.ext ?? 'bin';
+    return {
+      extension: fileType?.ext ?? 'bin',
+      mime: fileType?.mime ?? 'application/octet-stream',
+    };
   }
 }

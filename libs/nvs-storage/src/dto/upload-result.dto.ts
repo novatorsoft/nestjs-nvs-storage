@@ -4,4 +4,5 @@ export class UploadResult {
   path: string;
   extension: string;
   url: string;
+  mime: string;
 }

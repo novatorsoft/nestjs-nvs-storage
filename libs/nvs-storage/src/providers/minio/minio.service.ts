@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UploadArgs, UploadResult } from '../../dto';
+import { FileMime, ProviderUploadResult, UploadArgs } from '../../dto';
 import { NvsStorageService } from '../../nvs-storage.service';
 import { MinioConfig } from './minio.config';
 import {
@@ -31,24 +31,19 @@ export class MinioService extends NvsStorageService {
     });
   }
 
-  async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const extension = await this.getFileExtensionByBufferAsync(uploadArgs.file);
-    const fileName = `${uploadArgs.fileName}.${extension}`;
-    const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
-
+  async uploadProviderAsync(
+    uploadArgs: UploadArgs<Buffer> & FileMime,
+  ): Promise<ProviderUploadResult> {
     const command = new PutObjectCommand({
       Bucket: this.minioConfig.bucket,
-      Key: path,
+      Key: uploadArgs.path,
       Body: uploadArgs.file,
+      ContentType: uploadArgs.mime,
     });
 
     await this.minioClient.send(command);
     return {
-      path,
-      fileName,
-      size: uploadArgs.file.length,
-      extension,
-      url: `${this.minioConfig.endpoint}/${this.minioConfig.bucket}/${path}`,
+      url: `${this.minioConfig.endpoint}/${this.minioConfig.bucket}/${uploadArgs.path}`,
     };
   }
 

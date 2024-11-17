@@ -67,6 +67,7 @@ describe('S3Service', () => {
         Bucket: s3Config.bucket,
         Key: `${uploadArgs.path}/${uploadArgs.fileName}.png`,
         Body: uploadArgs.file,
+        ContentType: 'image/png',
       });
       expect(result).not.toBeNull();
     });
@@ -102,6 +103,7 @@ describe('S3Service', () => {
         Bucket: s3Config.bucket,
         Key: uploadArgs.fileName + '.png',
         Body: Buffer.from(uploadArgs.file, 'base64'),
+        ContentType: 'image/png',
       });
       expect(result).not.toBeNull();
     });
@@ -131,6 +133,7 @@ describe('S3Service', () => {
         Bucket: s3Config.bucket,
         Key: uploadArgs.fileName + '.png',
         Body: uploadArgs.getBufferFile(),
+        ContentType: 'image/png',
       });
       expect(result).not.toBeNull();
     });
@@ -171,6 +174,7 @@ describe('S3Service', () => {
         Bucket: s3Config.bucket,
         Key: uploadArgs.fileName + '.bin',
         Body: file,
+        ContentType: 'application/octet-stream',
       });
       expect(result).not.toBeNull();
     });

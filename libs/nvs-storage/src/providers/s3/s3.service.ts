@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { UploadArgs, UploadResult } from '../../dto';
+import { FileMime, ProviderUploadResult, UploadArgs } from '../../dto';
 import { NvsStorageService } from '../../nvs-storage.service';
 import { S3Config } from './s3.config';
 import {
@@ -30,24 +30,19 @@ export class S3Service extends NvsStorageService {
     });
   }
 
-  async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const extension = await this.getFileExtensionByBufferAsync(uploadArgs.file);
-    const fileName = `${uploadArgs.fileName}.${extension}`;
-    const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
-
+  async uploadProviderAsync(
+    uploadArgs: UploadArgs<Buffer> & FileMime,
+  ): Promise<ProviderUploadResult> {
     const command = new PutObjectCommand({
       Bucket: this.s3Config.bucket,
-      Key: path,
+      Key: uploadArgs.path,
       Body: uploadArgs.file,
+      ContentType: uploadArgs.mime,
     });
 
     await this.s3Client.send(command);
     return {
-      path,
-      fileName,
-      size: uploadArgs.file.length,
-      extension,
-      url: `${this.s3Config.endpoint}/${path}`,
+      url: `${this.s3Config.endpoint}/${this.s3Config.bucket}/${uploadArgs.path}`,
     };
   }
 
