@@ -8,6 +8,7 @@ type UploadResponse {
   path: String!
   extension: String!
   url: String!
+  mime: String!
 }
 
 type Query {

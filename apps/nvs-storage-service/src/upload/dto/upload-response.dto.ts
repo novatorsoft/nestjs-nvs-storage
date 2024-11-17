@@ -23,4 +23,8 @@ export class UploadResponse {
   @ApiResponseProperty()
   @Field()
   url: string;
+
+  @ApiResponseProperty()
+  @Field()
+  mime: string;
 }

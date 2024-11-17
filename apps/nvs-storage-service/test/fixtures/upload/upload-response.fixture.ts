@@ -16,4 +16,7 @@ export class UploadResponseFixture extends UploadResponse {
 
   @Mock((faker) => faker.internet.url())
   url: string;
+
+  @Mock((faker) => faker.system.mimeType())
+  mime: string;
 }

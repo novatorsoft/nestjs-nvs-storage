@@ -13,4 +13,7 @@ export class UploadResultFixture extends UploadResult {
 
   @Mock((faker) => faker.system.mimeType())
   extension: string;
+
+  @Mock((faker) => faker.system.mimeType())
+  mime: string;
 }
