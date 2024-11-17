@@ -9,6 +9,9 @@ describe('UploadModule', () => {
   let uploadModule: UploadModule;
 
   beforeEach(async () => {
+    const s3Config = MockFactory(S3ConfigFixture)
+      .mutate({ isGlobal: true })
+      .one();
     const app = await Test.createTestingModule({
       imports: [
         ConfigModule.forRoot({
@@ -16,7 +19,7 @@ describe('UploadModule', () => {
           load: [],
         }),
         UploadModule,
-        NvsStorageModule.forRoot(MockFactory(S3ConfigFixture).one()),
+        NvsStorageModule.register(s3Config),
       ],
     }).compile();
 

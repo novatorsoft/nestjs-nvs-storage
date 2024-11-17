@@ -16,7 +16,7 @@ export class NvsStorageModule {
     return NvsStorageModule.mergeObject(
       {
         module: NvsStorageModule,
-        global: false,
+        global: config?.isGlobal ?? false,
         providers: [
           {
             provide: 'StorageConfig',
@@ -33,7 +33,7 @@ export class NvsStorageModule {
     return NvsStorageModule.mergeObject(
       {
         module: NvsStorageModule,
-        global: false,
+        global: config?.isGlobal ?? false,
         imports: config.imports,
         exports: ['StorageService'],
         providers: [
@@ -48,41 +48,29 @@ export class NvsStorageModule {
     );
   }
 
-  static forRoot(config: ConfigType): DynamicModule {
-    return {
-      ...this.register(config),
-      global: true,
-    };
-  }
-
-  static forRootAsync(config: StorageAsyncConfig): DynamicModule {
-    return {
-      ...this.registerAsync(config),
-      global: true,
-    };
-  }
-
   private static getStorageProviderModuleConfig(provider?: StorageProvider) {
-    let storageModuleConfig = {};
-    if (provider === StorageProvider.S3)
-      storageModuleConfig = {
+    const storageModuleConfigs = {
+      [StorageProvider.S3]: {
         providers: [
           {
             provide: 'StorageService',
             useClass: S3Service,
           },
         ],
-      };
-    else if (provider === StorageProvider.MINIO)
-      storageModuleConfig = {
+      },
+      [StorageProvider.MINIO]: {
         providers: [
           {
             provide: 'StorageService',
             useClass: MinioService,
           },
         ],
-      };
-    else throw new Error('Invalid storage provider');
+      },
+    };
+
+    const storageModuleConfig = storageModuleConfigs[provider];
+
+    if (!storageModuleConfig) throw new Error('Invalid storage provider');
 
     return {
       ...storageModuleConfig,

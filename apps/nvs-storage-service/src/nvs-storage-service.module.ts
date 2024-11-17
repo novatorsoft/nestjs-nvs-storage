@@ -18,16 +18,15 @@ import s3Configuration from './config/s3.configuration';
       isGlobal: true,
       load: [appConfiguration, s3Configuration, minioConfiguration],
     }),
-    NvsStorageModule.forRootAsync({
+    NvsStorageModule.registerAsync({
+      isGlobal: true,
       provider: appConfiguration().storageProvider as StorageProvider,
       useFactory: (configService: ConfigService) => {
-        let storageConfig;
-        if (appConfiguration().storageProvider == StorageProvider.S3)
-          storageConfig = configService.get('s3');
-        else if (appConfiguration().storageProvider == StorageProvider.MINIO)
-          storageConfig = configService.get('minio');
-
-        return storageConfig;
+        const storageConfigs = {
+          [StorageProvider.S3]: configService.get('s3'),
+          [StorageProvider.MINIO]: configService.get('minio'),
+        };
+        return storageConfigs[appConfiguration().storageProvider];
       },
       inject: [ConfigService],
     }),

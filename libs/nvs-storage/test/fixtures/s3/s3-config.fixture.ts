@@ -16,4 +16,7 @@ export class S3ConfigFixture extends S3Config {
 
   @Mock((faker) => faker.lorem.word())
   bucket: string;
+
+  @Mock((faker) => faker.datatype.boolean())
+  isGlobal: boolean;
 }

@@ -7,5 +7,8 @@ import { StorageConfig } from './storage.config';
 export type ConfigType = S3Config | MinioConfig;
 
 export type StorageAsyncConfig = Pick<ModuleMetadata, 'imports'> &
-  Pick<FactoryProvider<ConfigType>, 'useFactory' | 'inject'> &
+  Pick<
+    FactoryProvider<Pick<ConfigType, 'provider' | 'isGlobal'>>,
+    'useFactory' | 'inject'
+  > &
   StorageConfig;

@@ -16,4 +16,7 @@ export class MinioConfigFixture extends MinioConfig {
 
   @Mock((faker) => faker.lorem.word())
   bucket: string;
+
+  @Mock((faker) => faker.datatype.boolean())
+  isGlobal: boolean;
 }
