@@ -1,5 +1,18 @@
 
 
+## [2.0.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v1.1.1...v2.0.0) (2024-11-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* removed forRoot methods and added global parameter to register methods
+
+### Features
+
+* add minio storage provider ([89dc1b7](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/89dc1b706e126c0b808a4f4f4774ddc1a924b215))
+* add minio storage provider in storage service ([367d011](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/367d011c703a5516317a0767e8e0352d06ffc492))
+* removed forRoot methods and added global parameter to register methods ([eaf5608](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/eaf56085370e079ca24d9acc74d919eada0e1753))
+
 ## [1.1.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v1.1.0...v1.1.1) (2024-10-07)
 
 
