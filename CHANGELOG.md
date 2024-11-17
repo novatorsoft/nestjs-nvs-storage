@@ -1,5 +1,17 @@
 
 
+## [2.1.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.0.1...v2.1.0) (2024-11-17)
+
+
+### Features
+
+* add content type for upload files ([1f4b57f](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/1f4b57f03b31e8d8b9d9acbbcdebf10000aa4c61))
+
+
+### Bug Fixes
+
+* fix for upload result dto ([47a7535](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/47a7535bd9e4e14adc857a504a77c5c6a1c159ec))
+
 ## [2.0.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.0.0...v2.0.1) (2024-11-17)
 
 
