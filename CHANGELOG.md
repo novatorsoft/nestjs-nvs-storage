@@ -1,5 +1,12 @@
 
 
+## [2.0.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.0.0...v2.0.1) (2024-11-17)
+
+
+### Bug Fixes
+
+* add region config in minio configs ([e34ed85](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/e34ed8516f0b1b40a9aef5dce4999713a15582c9))
+
 ## [2.0.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v1.1.1...v2.0.0) (2024-11-17)
 
 
