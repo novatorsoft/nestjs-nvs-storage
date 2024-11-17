@@ -23,6 +23,7 @@ export class MinioService extends NvsStorageService {
     this.minioClient = new S3Client({
       forcePathStyle: true,
       endpoint: minioConfig.endpoint,
+      region: minioConfig.region,
       credentials: {
         accessKeyId: minioConfig.accessKey,
         secretAccessKey: minioConfig.secretKey,

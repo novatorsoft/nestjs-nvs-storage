@@ -7,4 +7,5 @@ export class MinioConfig extends StorageConfig {
   bucket: string;
   accessKey: string;
   secretKey: string;
+  region: string;
 }
