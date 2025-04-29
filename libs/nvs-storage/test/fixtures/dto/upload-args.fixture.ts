@@ -1,6 +1,7 @@
-import { Faker, Mock } from 'mockingbird';
+import { Faker, Mock, MockFactory } from 'mockingbird';
+import { FileMime, UploadArgs } from '@lib/nvs-storage';
 
-import { UploadArgs } from '@lib/nvs-storage';
+import { FileMimeFixture } from './mime-type.fixture';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   private readonly base64File: string =
@@ -14,6 +15,8 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   @Mock((faker) => faker.lorem.word())
   fileName: string;
 
+  defaultMime?: FileMime;
+
   withBuffer() {
     this.file = Buffer.from(this.base64File, 'base64');
     return this;
@@ -26,6 +29,11 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
 
   withUrl() {
     this.file = Faker.image.imageUrl();
+    return this;
+  }
+
+  withDefaultMime() {
+    this.defaultMime = MockFactory(FileMimeFixture).one();
     return this;
   }
 

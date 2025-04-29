@@ -153,7 +153,10 @@ describe('MinioService', () => {
     });
 
     it('should successfully load a url file and get it as bin if there is no ext.', async () => {
-      const uploadArgs = MockFactory(UploadArgsFixture).one().withUrl();
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withUrl()
+        .withDefaultMime();
       const file = Buffer.from(Faker.lorem.words(2));
       delete uploadArgs.path;
 
@@ -172,11 +175,19 @@ describe('MinioService', () => {
       expect(s3Client.calls()).toHaveLength(1);
       expect(s3Client.call(0).args[0].input).toEqual({
         Bucket: minioConfig.bucket,
-        Key: uploadArgs.fileName + '.bin',
+        Key: `${uploadArgs.fileName}.${uploadArgs.defaultMime.extension}`,
         Body: file,
-        ContentType: 'application/octet-stream',
+        ContentType: uploadArgs.defaultMime.mime,
       });
       expect(result).not.toBeNull();
+    });
+
+    it('should throw an error when file type is not supported', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture).one().withUrl();
+
+      await expect(
+        service.uploadWithBase64Async(uploadArgs as UploadArgs<string>),
+      ).rejects.toThrow('Failed to determine file type.');
     });
   });
 

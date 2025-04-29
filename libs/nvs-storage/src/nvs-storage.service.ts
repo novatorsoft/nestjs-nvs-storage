@@ -44,7 +44,7 @@ export abstract class NvsStorageService {
   }
 
   async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const fileInfo = await this.getFileMimeByBufferAsync(uploadArgs.file);
+    const fileInfo = await this.getFileMimeByBufferAsync(uploadArgs);
     const fileName = `${uploadArgs.fileName}.${fileInfo.extension}`;
     const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
 
@@ -65,11 +65,18 @@ export abstract class NvsStorageService {
     };
   }
 
-  protected async getFileMimeByBufferAsync(file: Buffer): Promise<FileMime> {
-    const fileType = await fromBuffer(file);
-    return {
-      extension: fileType?.ext ?? 'bin',
-      mime: fileType?.mime ?? 'application/octet-stream',
-    };
+  protected async getFileMimeByBufferAsync(
+    uploadArgs: UploadArgs<Buffer>,
+  ): Promise<FileMime> {
+    const fileType = await fromBuffer(uploadArgs.file);
+
+    if (fileType)
+      return {
+        extension: fileType.ext,
+        mime: fileType.mime,
+      };
+    else if (uploadArgs.defaultMime) return uploadArgs.defaultMime;
+
+    throw new Error('Failed to determine file type.');
   }
 }
