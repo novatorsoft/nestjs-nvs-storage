@@ -1,5 +1,12 @@
 
 
+## [2.3.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.2.0...v2.3.0) (2025-04-29)
+
+
+### Features
+
+* add default mime in upload service ([d8fe361](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/d8fe361ba2bd6baa97391ceb88cc93b51575f691))
+
 ## [2.2.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.1.0...v2.2.0) (2025-04-29)
 
 
