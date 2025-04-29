@@ -10,6 +10,11 @@ export class UploadService {
     private readonly storageService: NvsStorageService,
   ) {}
 
+  private readonly defaultMime = {
+    extension: 'bin',
+    mime: 'application/octet-stream',
+  };
+
   uploadWithBase64Async(
     uploadRequest: UploadWithBase64Request,
   ): Promise<UploadResult> {
@@ -22,6 +27,7 @@ export class UploadService {
       fileName: this.createFileName(fileName),
       path: uploadRequest.path,
       file: base64Data,
+      defaultMime: this.defaultMime,
     });
   }
 
@@ -32,6 +38,7 @@ export class UploadService {
       file: uploadRequest.fileUrl,
       fileName: this.createFileName(uploadRequest.fileName),
       path: uploadRequest.path,
+      defaultMime: this.defaultMime,
     });
   }
 
