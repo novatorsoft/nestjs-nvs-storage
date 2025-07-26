@@ -1,5 +1,12 @@
 
 
+## [2.4.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.3.0...v2.4.0) (2025-07-26)
+
+
+### Features
+
+* enhance file upload validation with size and type checks ([cba1f4d](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/cba1f4d88ea8680b1c94cde0737978507ed8875f))
+
 ## [2.3.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.2.0...v2.3.0) (2025-04-29)
 
 
