@@ -84,6 +84,7 @@ export abstract class NvsStorageService {
   }
 
   private validateFileSize(uploadArgs: UploadArgs<Buffer>): void {
+    console.log(uploadArgs.maxSize, uploadArgs.file.length);
     if (uploadArgs.maxSize && uploadArgs.file.length > uploadArgs.maxSize)
       throw new Error('File size exceeds the maximum allowed size.');
   }

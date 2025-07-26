@@ -83,6 +83,28 @@ describe('MinioService', () => {
         'Upload failed',
       );
     });
+
+    it('should throw an error if file size exceeds the maximum allowed size', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer()
+        .withMaxSize(1) as UploadArgs<Buffer>;
+
+      await expect(service.uploadAsync(uploadArgs)).rejects.toThrow(
+        'File size exceeds the maximum allowed size.',
+      );
+    });
+
+    it('should throw an error if file type is not allowed', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer()
+        .withValidateFileTypes(['image/jpeg']) as UploadArgs<Buffer>;
+
+      await expect(service.uploadAsync(uploadArgs)).rejects.toThrow(
+        "File type 'image/png' is not allowed.",
+      );
+    });
   });
 
   describe('uploadWithBase64Async', () => {

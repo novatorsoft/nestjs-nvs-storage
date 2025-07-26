@@ -1,4 +1,5 @@
 import { FileMime } from '@lib/nvs-storage';
+import { MimeType } from 'file-type';
 import { Mock } from 'mockingbird';
 
 export class FileMimeFixture extends FileMime {
@@ -6,5 +7,5 @@ export class FileMimeFixture extends FileMime {
   extension: string;
 
   @Mock((faker) => faker.system.mimeType())
-  mime: string;
+  mime: MimeType;
 }

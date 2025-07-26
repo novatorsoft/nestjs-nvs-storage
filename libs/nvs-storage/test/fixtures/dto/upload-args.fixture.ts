@@ -2,6 +2,7 @@ import { Faker, Mock, MockFactory } from 'mockingbird';
 import { FileMime, UploadArgs } from '@lib/nvs-storage';
 
 import { FileMimeFixture } from './mime-type.fixture';
+import { MimeType } from 'file-type';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   private readonly base64File: string =
@@ -16,6 +17,10 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   fileName: string;
 
   defaultMime?: FileMime;
+
+  maxSize?: number;
+
+  validateFileTypes?: Array<MimeType>;
 
   withBuffer() {
     this.file = Buffer.from(this.base64File, 'base64');
@@ -33,7 +38,17 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   }
 
   withDefaultMime() {
-    this.defaultMime = MockFactory(FileMimeFixture).one();
+    this.defaultMime = MockFactory(FileMimeFixture).one() as FileMime;
+    return this;
+  }
+
+  withMaxSize(maxSize: number) {
+    this.maxSize = maxSize;
+    return this;
+  }
+
+  withValidateFileTypes(validateFileTypes: Array<MimeType>) {
+    this.validateFileTypes = validateFileTypes;
     return this;
   }
 

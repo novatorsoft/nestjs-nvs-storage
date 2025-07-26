@@ -1,4 +1,4 @@
-import { NvsStorageService, UploadResult } from '@lib/nvs-storage';
+import { FileMime, NvsStorageService, UploadResult } from '@lib/nvs-storage';
 import { Inject, Injectable } from '@nestjs/common';
 import { UploadWithBase64Request, UploadWithUrlRequest } from './dto';
 import { uid } from 'uid';
@@ -10,9 +10,9 @@ export class UploadService {
     private readonly storageService: NvsStorageService,
   ) {}
 
-  private readonly defaultMime = {
-    extension: 'bin',
-    mime: 'application/octet-stream',
+  private readonly defaultMime: FileMime = {
+    extension: 'pdf',
+    mime: 'application/pdf',
   };
 
   uploadWithBase64Async(
