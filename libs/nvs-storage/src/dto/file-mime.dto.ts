@@ -1,4 +1,6 @@
+import { MimeType } from 'file-type';
+
 export class FileMime {
   extension: string;
-  mime: string;
+  mime: MimeType;
 }

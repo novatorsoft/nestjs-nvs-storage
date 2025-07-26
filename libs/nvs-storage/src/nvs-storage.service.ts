@@ -48,6 +48,9 @@ export abstract class NvsStorageService {
     const fileName = `${uploadArgs.fileName}.${fileInfo.extension}`;
     const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
 
+    this.validateFileSize(uploadArgs);
+    this.validateFileType(uploadArgs, fileInfo);
+
     const uploadResult = await this.uploadProviderAsync({
       ...uploadArgs,
       ...fileInfo,
@@ -69,14 +72,30 @@ export abstract class NvsStorageService {
     uploadArgs: UploadArgs<Buffer>,
   ): Promise<FileMime> {
     const fileType = await fromBuffer(uploadArgs.file);
-
+    let result: FileMime;
     if (fileType)
-      return {
+      result = {
         extension: fileType.ext,
         mime: fileType.mime,
       };
-    else if (uploadArgs.defaultMime) return uploadArgs.defaultMime;
+    else if (uploadArgs.defaultMime) result = uploadArgs.defaultMime;
+    else throw new Error('Failed to determine file type.');
+    return result;
+  }
 
-    throw new Error('Failed to determine file type.');
+  private validateFileSize(uploadArgs: UploadArgs<Buffer>): void {
+    if (uploadArgs.maxSize && uploadArgs.file.length > uploadArgs.maxSize)
+      throw new Error('File size exceeds the maximum allowed size.');
+  }
+
+  private validateFileType(
+    uploadArgs: UploadArgs<Buffer>,
+    fileMime: FileMime,
+  ): void {
+    if (
+      uploadArgs.validateFileTypes &&
+      !uploadArgs.validateFileTypes.includes(fileMime.mime)
+    )
+      throw new Error(`File type '${fileMime.mime}' is not allowed.`);
   }
 }
