@@ -18,15 +18,10 @@ export class UploadService {
   uploadWithBase64Async(
     uploadRequest: UploadWithBase64Request,
   ): Promise<UploadResult> {
-    const base64Data = uploadRequest.file.split(',').at(1);
-    const fileName = uploadRequest.fileName
-      ? uploadRequest.fileName
-      : `${uid(6)}-${new Date().getTime()}`;
-
     return this.storageService.uploadWithBase64Async({
-      fileName: this.createFileName(fileName),
+      fileName: this.createFileName(uploadRequest.fileName),
       path: uploadRequest.path,
-      file: base64Data,
+      file: uploadRequest.file,
       defaultMime: this.defaultMime,
     });
   }

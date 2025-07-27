@@ -20,9 +20,10 @@ export abstract class NvsStorageService {
   async uploadWithBase64Async(
     uploadArgs: UploadArgs<string>,
   ): Promise<UploadResult> {
+    const base64Data = uploadArgs.file.split(',').pop();
     return await this.uploadAsync({
       ...uploadArgs,
-      file: Buffer.from(uploadArgs.file, 'base64'),
+      file: Buffer.from(base64Data, 'base64'),
     });
   }
 
@@ -84,7 +85,6 @@ export abstract class NvsStorageService {
   }
 
   private validateFileSize(uploadArgs: UploadArgs<Buffer>): void {
-    console.log(uploadArgs.maxSize, uploadArgs.file.length);
     if (uploadArgs.maxSize && uploadArgs.file.length > uploadArgs.maxSize)
       throw new Error('File size exceeds the maximum allowed size.');
   }

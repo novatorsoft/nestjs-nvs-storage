@@ -109,22 +109,22 @@ describe('MinioService', () => {
 
   describe('uploadWithBase64Async', () => {
     it('should upload a base64 encoded file successfully', async () => {
-      const uploadArgs = MockFactory(UploadArgsFixture)
-        .one()
-        .withBase64() as UploadArgs<string>;
+      const uploadArgs = MockFactory(UploadArgsFixture).one().withBase64();
       delete uploadArgs.path;
 
       s3Client.on(PutObjectCommand).resolves({
         $metadata: { httpStatusCode: 200 },
       });
 
-      const result = await service.uploadWithBase64Async(uploadArgs);
+      const result = await service.uploadWithBase64Async(
+        uploadArgs as UploadArgs<string>,
+      );
 
       expect(s3Client.calls()).toHaveLength(1);
       expect(s3Client.call(0).args[0].input).toEqual({
         Bucket: minioConfig.bucket,
         Key: uploadArgs.fileName + '.png',
-        Body: Buffer.from(uploadArgs.file, 'base64'),
+        Body: uploadArgs.getBufferFile(),
         ContentType: 'image/png',
       });
       expect(result).not.toBeNull();

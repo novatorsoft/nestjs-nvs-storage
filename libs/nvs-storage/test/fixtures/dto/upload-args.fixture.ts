@@ -6,7 +6,7 @@ import { MimeType } from 'file-type';
 
 export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   private readonly base64File: string =
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgEBAYLd9L8AAAAASUVORK5CYII=';
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAgEBAYLd9L8AAAAASUVORK5CYII=';
 
   file: string | Buffer;
 
@@ -23,7 +23,7 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   validateFileTypes?: Array<MimeType>;
 
   withBuffer() {
-    this.file = Buffer.from(this.base64File, 'base64');
+    this.file = this.getBufferFile();
     return this;
   }
 
@@ -53,6 +53,6 @@ export class UploadArgsFixture extends UploadArgs<string | Buffer> {
   }
 
   getBufferFile() {
-    return Buffer.from(this.base64File, 'base64');
+    return Buffer.from(this.base64File.split(',').pop(), 'base64');
   }
 }
