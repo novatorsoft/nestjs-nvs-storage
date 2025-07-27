@@ -1,5 +1,12 @@
 
 
+## [2.5.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.4.0...v2.5.0) (2025-07-27)
+
+
+### Features
+
+* streamline base64 file handling in upload services and tests ([12d7cc3](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/12d7cc33276479ed0dc6a6311f41b3f554778734))
+
 ## [2.4.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.3.0...v2.4.0) (2025-07-26)
 
 
