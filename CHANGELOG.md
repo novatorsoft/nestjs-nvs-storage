@@ -1,5 +1,12 @@
 
 
+## [2.6.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.5.1...v2.6.0) (2025-12-08)
+
+
+### Features
+
+* update file type handling in storage services ([7d1a0bf](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/7d1a0bfe46966d85762578b979796ee7f23e55ce))
+
 ## [2.5.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.5.0...v2.5.1) (2025-12-08)
 
 
