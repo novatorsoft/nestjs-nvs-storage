@@ -1,5 +1,12 @@
 
 
+## [2.6.3](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.2...v2.6.3) (2025-12-08)
+
+
+### Bug Fixes
+
+* make isGlobal property optional in StorageConfig class ([0ce102f](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/0ce102fab48fc5717d8a9ff112f33676660ef28d))
+
 ## [2.6.2](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.1...v2.6.2) (2025-12-08)
 
 ## [2.6.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.0...v2.6.1) (2025-12-08)
