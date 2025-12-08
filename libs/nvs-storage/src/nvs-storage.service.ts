@@ -2,8 +2,8 @@ import { FileMime, UploadArgs, UploadResult } from './dto';
 
 import { HttpService } from '@nestjs/axios';
 import { ProviderUploadResult } from './dto/provider-upload-result.dto';
+import { fileTypeFromBuffer } from 'file-type';
 import { firstValueFrom } from 'rxjs';
-import { fromBuffer } from 'file-type';
 
 export abstract class NvsStorageService {
   constructor(private readonly httpService: HttpService) {}
@@ -72,7 +72,8 @@ export abstract class NvsStorageService {
   protected async getFileMimeByBufferAsync(
     uploadArgs: UploadArgs<Buffer>,
   ): Promise<FileMime> {
-    const fileType = await fromBuffer(uploadArgs.file);
+    console.log(uploadArgs);
+    const fileType = await fileTypeFromBuffer(new Uint8Array(uploadArgs.file));
     let result: FileMime;
     if (fileType)
       result = {

@@ -5,6 +5,16 @@ import { MockFactory } from 'mockingbird';
 import { NvsStorageModule } from './nvs-storage.module';
 import { NvsStorageService } from './nvs-storage.service';
 import { Test } from '@nestjs/testing';
+import { fileTypeFromBuffer } from 'file-type';
+
+jest.mock('file-type');
+
+beforeEach(() => {
+  (fileTypeFromBuffer as jest.Mock).mockResolvedValue({
+    ext: 'png',
+    mime: 'image/png',
+  });
+});
 
 describe('NvsStorageModule', () => {
   describe('S3 Provider', () => {

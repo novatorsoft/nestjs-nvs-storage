@@ -4,7 +4,6 @@ import {
 } from '../test/fixtures';
 import { NvsStorageModule, StorageProvider } from '@lib/nvs-storage';
 
-import { ConfigModule } from '@nestjs/config';
 import { MockFactory } from 'mockingbird';
 import { NvsStorageServiceModule } from './nvs-storage-service.module';
 import { Test } from '@nestjs/testing';

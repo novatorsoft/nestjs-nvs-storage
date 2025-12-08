@@ -12,11 +12,13 @@ import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
 import { S3Service } from './s3.service';
 import { UploadArgs } from '@lib/nvs-storage';
+import { fileTypeFromBuffer } from 'file-type';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { mockClient } from 'aws-sdk-client-mock';
 import { of } from 'rxjs';
 
 jest.mock('@aws-sdk/s3-request-presigner');
+jest.mock('file-type');
 
 describe('S3Service', () => {
   let service: S3Service;
@@ -190,6 +192,11 @@ describe('S3Service', () => {
         .spyOn(httpService, 'get')
         .mockReturnValue(of({ data: file } as AxiosResponse));
 
+      jest.mocked(fileTypeFromBuffer).mockResolvedValue({
+        ext: uploadArgs.defaultMime?.extension,
+        mime: uploadArgs.defaultMime?.mime,
+      });
+
       const result = await service.uploadWithUrlAsync(
         uploadArgs as UploadArgs<string>,
       );
@@ -206,7 +213,7 @@ describe('S3Service', () => {
 
     it('should throw an error when file type is not supported', async () => {
       const uploadArgs = MockFactory(UploadArgsFixture).one().withUrl();
-
+      jest.mocked(fileTypeFromBuffer).mockResolvedValue(null);
       await expect(
         service.uploadWithBase64Async(uploadArgs as UploadArgs<string>),
       ).rejects.toThrow('Failed to determine file type.');

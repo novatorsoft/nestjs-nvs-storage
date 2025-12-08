@@ -1,5 +1,4 @@
 import { FileMime } from './file-mime.dto';
-import { MimeType } from 'file-type';
 
 export class UploadArgs<FileType extends string | Buffer> {
   file: FileType;
@@ -7,5 +6,5 @@ export class UploadArgs<FileType extends string | Buffer> {
   fileName: string;
   defaultMime?: FileMime;
   maxSize?: number;
-  validateFileTypes?: Array<MimeType>;
+  validateFileTypes?: Array<string>;
 }
