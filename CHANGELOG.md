@@ -1,5 +1,12 @@
 
 
+## [2.5.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.5.0...v2.5.1) (2025-12-08)
+
+
+### Bug Fixes
+
+* update StorageAsyncConfig to use Omit for provider and isGlobal properties ([4c7b3dc](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/4c7b3dc340f875b9867c7adc38b8863ec1ea0def))
+
 ## [2.5.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.4.0...v2.5.0) (2025-07-27)
 
 
