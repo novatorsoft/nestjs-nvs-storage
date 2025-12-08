@@ -18,6 +18,8 @@ import { NvsStorageServiceModule } from '../src/nvs-storage-service.module';
 import { mockClient } from 'aws-sdk-client-mock';
 import { of } from 'rxjs';
 
+jest.mock('file-type');
+
 describe('UploadController (e2e)', () => {
   let app: INestApplication;
   const s3Client = mockClient(S3Client);
