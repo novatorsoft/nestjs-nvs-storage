@@ -72,7 +72,6 @@ export abstract class NvsStorageService {
   protected async getFileMimeByBufferAsync(
     uploadArgs: UploadArgs<Buffer>,
   ): Promise<FileMime> {
-    console.log(uploadArgs);
     const fileType = await fileTypeFromBuffer(new Uint8Array(uploadArgs.file));
     let result: FileMime;
     if (fileType)
