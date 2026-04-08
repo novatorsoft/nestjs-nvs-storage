@@ -1,5 +1,7 @@
 
 
+## [2.6.5](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.4...v2.6.5) (2026-04-08)
+
 ## [2.6.4](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.3...v2.6.4) (2026-03-12)
 
 ## [2.6.3](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.2...v2.6.3) (2025-12-08)
