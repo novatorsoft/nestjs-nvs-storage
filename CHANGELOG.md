@@ -1,5 +1,12 @@
 
 
+## [2.7.1](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.7.0...v2.7.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* remove redundant import of sharp in nvs-storage.service.ts ([76c83b5](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/76c83b5af3cf51b51c334b40359240de3085aa09))
+
 ## [2.7.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.5...v2.7.0) (2026-04-28)
 
 
