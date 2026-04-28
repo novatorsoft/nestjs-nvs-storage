@@ -17,14 +17,11 @@ import { fileTypeFromBuffer } from 'file-type';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { mockClient } from 'aws-sdk-client-mock';
 import { of } from 'rxjs';
-import sharp from 'sharp';
+import sharp = require('sharp');
 
 jest.mock('@aws-sdk/s3-request-presigner');
 jest.mock('file-type');
-jest.mock('sharp', () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
+jest.mock('sharp', () => jest.fn());
 
 describe('MinioService', () => {
   let service: MinioService;

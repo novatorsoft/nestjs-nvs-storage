@@ -38,6 +38,6 @@ export class UploadService {
   }
 
   private createFileName(fileName: string) {
-    return fileName ?? `${uid(6)}-${new Date().getTime()}`;
+    return fileName ?? `${uid(6)}-${Date.now()}`;
   }
 }

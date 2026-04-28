@@ -8,7 +8,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { Module } from '@nestjs/common';
 import { UploadModule } from './upload/upload.module';
 import appConfiguration from './config/configuration';
-import { join } from 'path';
+import { join } from 'node:path';
 import minioConfiguration from './config/minio.configuration';
 import s3Configuration from './config/s3.configuration';
 
