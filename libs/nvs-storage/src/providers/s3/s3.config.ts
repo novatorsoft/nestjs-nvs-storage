@@ -1,5 +1,5 @@
 import { StorageConfig } from '../../config';
-import { StorageProvider } from '../../dto';
+import { StorageProvider } from '../../enum';
 
 export class S3Config extends StorageConfig {
   readonly provider = StorageProvider.S3;

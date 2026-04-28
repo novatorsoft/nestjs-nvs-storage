@@ -2,6 +2,7 @@ import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
+  PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { Faker, MockFactory } from 'mockingbird';
@@ -10,15 +11,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { AxiosResponse } from 'axios';
 import { HttpService } from '@nestjs/axios';
+import { ImageExtension, UploadArgs } from '@lib/nvs-storage';
 import { S3Service } from './s3.service';
-import { UploadArgs } from '@lib/nvs-storage';
 import { fileTypeFromBuffer } from 'file-type';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { mockClient } from 'aws-sdk-client-mock';
 import { of } from 'rxjs';
+import sharp from 'sharp';
 
 jest.mock('@aws-sdk/s3-request-presigner');
 jest.mock('file-type');
+jest.mock('sharp', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 describe('S3Service', () => {
   let service: S3Service;
@@ -46,6 +52,20 @@ describe('S3Service', () => {
     service = module.get<S3Service>(S3Service);
     httpService = module.get<HttpService>(HttpService);
     s3Client.reset();
+
+    jest.mocked(fileTypeFromBuffer).mockReset();
+    jest.mocked(fileTypeFromBuffer).mockResolvedValue({
+      ext: 'png',
+      mime: 'image/png',
+    });
+
+    const convertedBuffer = Buffer.from('converted-webp');
+    (sharp as unknown as jest.Mock).mockReset();
+    (sharp as unknown as jest.Mock).mockImplementation(() => ({
+      toFormat: jest.fn().mockReturnValue({
+        toBuffer: jest.fn().mockResolvedValue(convertedBuffer),
+      }),
+    }));
   });
 
   it('should be defined', () => {
@@ -106,6 +126,113 @@ describe('S3Service', () => {
       await expect(service.uploadAsync(uploadArgs)).rejects.toThrow(
         "File type 'image/png' is not allowed.",
       );
+    });
+
+    it('should not call sharp when convertToImageExtension matches the buffer type', async () => {
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer() as UploadArgs<Buffer>;
+      uploadArgs.convertToImageExtension = ImageExtension.PNG;
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      await service.uploadAsync(uploadArgs);
+
+      expect(sharp).not.toHaveBeenCalled();
+    });
+
+    it('should convert image with sharp and upload the converted buffer when convertToImageExtension differs', async () => {
+      const webpBuffer = Buffer.from('webp-bytes');
+      jest
+        .mocked(fileTypeFromBuffer)
+        .mockResolvedValueOnce({ ext: 'png', mime: 'image/png' })
+        .mockResolvedValueOnce({ ext: 'webp', mime: 'image/webp' });
+
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer() as UploadArgs<Buffer>;
+      uploadArgs.convertToImageExtension = ImageExtension.WEBP;
+      uploadArgs.convertToImageQuality = 82;
+
+      const originalFile = uploadArgs.file;
+
+      const toFormat = jest.fn().mockReturnValue({
+        toBuffer: jest.fn().mockResolvedValue(webpBuffer),
+      });
+      (sharp as unknown as jest.Mock).mockImplementation(() => ({ toFormat }));
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      const result = await service.uploadAsync(uploadArgs);
+
+      expect(sharp).toHaveBeenCalledWith(originalFile);
+      expect(toFormat).toHaveBeenCalledWith(ImageExtension.WEBP, {
+        quality: 82,
+      });
+      expect(s3Client.call(0).args[0].input).toEqual({
+        Bucket: s3Config.bucket,
+        Key: `${uploadArgs.path}/${uploadArgs.fileName}.webp`,
+        Body: webpBuffer,
+        ContentType: 'image/webp',
+      });
+      expect(result.extension).toBe('webp');
+      expect(result.mime).toBe('image/webp');
+      expect(result.size).toBe(webpBuffer.length);
+    });
+
+    it('should use default quality 100 for sharp when convertToImageQuality is omitted', async () => {
+      const webpBuffer = Buffer.from('webp');
+      jest
+        .mocked(fileTypeFromBuffer)
+        .mockResolvedValueOnce({ ext: 'png', mime: 'image/png' })
+        .mockResolvedValueOnce({ ext: 'webp', mime: 'image/webp' });
+
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer() as UploadArgs<Buffer>;
+      uploadArgs.convertToImageExtension = ImageExtension.WEBP;
+
+      const toFormat = jest.fn().mockReturnValue({
+        toBuffer: jest.fn().mockResolvedValue(webpBuffer),
+      });
+      (sharp as unknown as jest.Mock).mockImplementation(() => ({ toFormat }));
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      await service.uploadAsync(uploadArgs);
+
+      expect(toFormat).toHaveBeenCalledWith(ImageExtension.WEBP, {
+        quality: 100,
+      });
+    });
+
+    it('should not convert when convertToImageExtension is set but the file is not an image', async () => {
+      jest.mocked(fileTypeFromBuffer).mockResolvedValue({
+        ext: 'pdf',
+        mime: 'application/pdf',
+      });
+
+      const uploadArgs = MockFactory(UploadArgsFixture)
+        .one()
+        .withBuffer() as UploadArgs<Buffer>;
+      uploadArgs.convertToImageExtension = ImageExtension.WEBP;
+
+      s3Client.on(PutObjectCommand).resolves({
+        $metadata: { httpStatusCode: 200 },
+      });
+
+      await service.uploadAsync(uploadArgs);
+
+      expect(sharp).not.toHaveBeenCalled();
+      expect(
+        (s3Client.call(0).args[0].input as PutObjectCommandInput).Key,
+      ).toBe(`${uploadArgs.path}/${uploadArgs.fileName}.pdf`);
     });
   });
 

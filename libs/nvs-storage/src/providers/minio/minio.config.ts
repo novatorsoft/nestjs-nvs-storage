@@ -1,5 +1,5 @@
 import { StorageConfig } from '../../config';
-import { StorageProvider } from '../../dto';
+import { StorageProvider } from '../../enum';
 
 export class MinioConfig extends StorageConfig {
   readonly provider = StorageProvider.MINIO;

@@ -1,9 +1,11 @@
 import { FileMime, UploadArgs, UploadResult } from './dto';
 
 import { HttpService } from '@nestjs/axios';
+import { ImageExtension } from './enum';
 import { ProviderUploadResult } from './dto/provider-upload-result.dto';
 import { fileTypeFromBuffer } from 'file-type';
 import { firstValueFrom } from 'rxjs';
+import sharp from 'sharp';
 
 export abstract class NvsStorageService {
   constructor(private readonly httpService: HttpService) {}
@@ -45,7 +47,21 @@ export abstract class NvsStorageService {
   }
 
   async uploadAsync(uploadArgs: UploadArgs<Buffer>): Promise<UploadResult> {
-    const fileInfo = await this.getFileMimeByBufferAsync(uploadArgs);
+    let fileInfo = await this.getFileMimeByBufferAsync(uploadArgs);
+
+    if (
+      uploadArgs.convertToImageExtension &&
+      fileInfo.mime.startsWith('image/') &&
+      fileInfo.extension !== uploadArgs.convertToImageExtension
+    ) {
+      uploadArgs.file = await this.convertImageAsync(
+        uploadArgs.file,
+        uploadArgs.convertToImageExtension,
+        uploadArgs.convertToImageQuality,
+      );
+      fileInfo = await this.getFileMimeByBufferAsync(uploadArgs);
+    }
+
     const fileName = `${uploadArgs.fileName}.${fileInfo.extension}`;
     const path = uploadArgs.path ? `${uploadArgs.path}/${fileName}` : fileName;
 
@@ -69,7 +85,15 @@ export abstract class NvsStorageService {
     };
   }
 
-  protected async getFileMimeByBufferAsync(
+  private async convertImageAsync(
+    image: Buffer,
+    targetExtension: ImageExtension,
+    quality: number = 100,
+  ): Promise<Buffer> {
+    return sharp(image).toFormat(targetExtension, { quality }).toBuffer();
+  }
+
+  private async getFileMimeByBufferAsync(
     uploadArgs: UploadArgs<Buffer>,
   ): Promise<FileMime> {
     const fileType = await fileTypeFromBuffer(new Uint8Array(uploadArgs.file));

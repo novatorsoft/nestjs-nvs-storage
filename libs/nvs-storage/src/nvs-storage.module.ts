@@ -6,7 +6,7 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { MinioService } from './providers/minio/minio.service';
 import { S3Service } from './providers/s3/s3.service';
-import { StorageProvider } from './dto';
+import { StorageProvider } from './enum';
 
 @Module({
   providers: [],
