@@ -1,3 +1,5 @@
+import * as sharp from 'sharp';
+
 import { FileMime, UploadArgs, UploadResult } from './dto';
 
 import { HttpService } from '@nestjs/axios';
@@ -5,7 +7,6 @@ import { ImageExtension } from './enum';
 import { ProviderUploadResult } from './dto/provider-upload-result.dto';
 import { fileTypeFromBuffer } from 'file-type';
 import { firstValueFrom } from 'rxjs';
-import sharp from 'sharp';
 
 export abstract class NvsStorageService {
   constructor(private readonly httpService: HttpService) {}
