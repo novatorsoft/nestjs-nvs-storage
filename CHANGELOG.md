@@ -1,5 +1,12 @@
 
 
+## [2.7.0](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.5...v2.7.0) (2026-04-28)
+
+
+### Features
+
+* add image conversion functionality using sharp and introduce ImageExtension enum ([42c0dfc](https://github.com/ismetkizgin/nestjs-nvs-storage/commit/42c0dfc0a0f3bbc9dd021de907aba8fc35c3f6df))
+
 ## [2.6.5](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.4...v2.6.5) (2026-04-08)
 
 ## [2.6.4](https://github.com/ismetkizgin/nestjs-nvs-storage/compare/v2.6.3...v2.6.4) (2026-03-12)
